@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { TransactionService } from "../services/transaction.service";
+import { monthCalc } from "../utils/monthCalc";
 
 export class TransactionController {
   public async getMyTransactions(
@@ -17,7 +18,15 @@ export class TransactionController {
       monthRef,
       userId
     );
-    res.status(200).json({ transactions });
+    if (!transactions || transactions.length === 0) {
+      res.status(404).json({ message: "Nenhuma transacao encontrada" });
+      return;
+    }
+
+    const incoming = monthCalc(transactions, "I");
+    const output = monthCalc(transactions, "O");
+
+    res.status(200).json({ transactions, incoming, output });
     return;
   }
   public async createTransaction(

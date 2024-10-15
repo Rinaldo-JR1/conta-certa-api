@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { addMonths, format } from "date-fns";
+import { userService } from "./user.service";
+import { TransactionType } from "../shared/types/TransactionType";
 export class TransactionService {
   private static prisma = new PrismaClient();
 
@@ -45,7 +47,7 @@ export class TransactionService {
     userId: string,
     parcels: number,
     amount: number,
-    type: string,
+    type: TransactionType,
     title: string,
     startDate: Date
   ) {
@@ -61,6 +63,7 @@ export class TransactionService {
             userId: userId,
           },
         });
+        await userService.updateBalance(userId, type, amount / parcels);
       }
     } catch (error) {
       console.error(error);

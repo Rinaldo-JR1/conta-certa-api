@@ -19,7 +19,7 @@ export class AuthController {
     res.cookie("token", TokenService.generateToken(data.id), {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000,
+      maxAge: 3600000 * 6,
     });
 
     res.status(200).json({ message: "Usuario logado com sucesso" });
