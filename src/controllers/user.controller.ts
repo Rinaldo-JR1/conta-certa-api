@@ -3,7 +3,12 @@ import { userService } from "../services/user.service";
 
 export class UserController {
   public async getMyUser(req: Request, res: Response, next: NextFunction) {
-    res.status(200).json(await userService.getMyUser());
-    return;
+    const { userId } = req.body;
+    if (!userId) {
+      res.status(400).json({ message: "Dados invalidos" });
+      return;
+    }
+    const user = await userService.getMyUser(userId);
+    res.status(200).json({ user: user });
   }
 }
