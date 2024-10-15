@@ -19,8 +19,8 @@ class App {
       console.log(`Ip: ${req.ip} || Request: ${req.method} ${req.path}`);
       next();
     });
-    this.app.use(`${this.baseUrl}/user`, userRoutes);
-    this.app.use(`${this.baseUrl}/transaction`, transactionRoutes);
+    this.app.use(`${this.baseUrl}/users`, userRoutes);
+    this.app.use(`${this.baseUrl}/transactions`, transactionRoutes);
   }
 
   listen() {
