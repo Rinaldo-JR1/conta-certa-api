@@ -45,6 +45,7 @@ export class TransactionService {
     parcels: number,
     amount: number,
     type: string,
+    title: string,
     startDate: Date
   ) {
     try {
@@ -52,10 +53,11 @@ export class TransactionService {
         const monthRef = format(addMonths(startDate, i), "yyyy-MM");
         await this.prisma.transaction.create({
           data: {
+            title,
             amount: amount / parcels,
             monthRef: monthRef,
             type,
-            userId: "3aa2f89d-a648-445c-a066-4a562b39e3b6",
+            userId: userId,
           },
         });
       }

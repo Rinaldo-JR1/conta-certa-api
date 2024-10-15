@@ -25,6 +25,7 @@ model User {
 model Transaction {
   id        String   @id @default(uuid())
   amount    Float
+  title     String
   monthRef  String
   type      String
   createdAt DateTime @default(now())
