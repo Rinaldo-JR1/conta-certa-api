@@ -8,14 +8,16 @@ export class TransactionController {
     next: NextFunction
   ) {
     const { monthRef } = req.params;
+    const { userId } = req.body;
     if (!monthRef) {
       res.status(400).json({ message: "Nao foi informado um mes" });
       return;
     }
     const transactions = await TransactionService.getTransactionByMonth(
-      monthRef
+      monthRef,
+      userId
     );
-    res.status(200).json({ transactions: transactions });
+    res.status(200).json({ transactions });
     return;
   }
   public async createTransaction(

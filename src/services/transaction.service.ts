@@ -16,11 +16,12 @@ export class TransactionService {
     }
   }
 
-  public static async getTransactionByMonth(monthRef: string) {
+  public static async getTransactionByMonth(monthRef: string, userId: string) {
     try {
       return await this.prisma.transaction.findMany({
         where: {
           monthRef,
+          userId,
         },
       });
     } catch (error) {
@@ -49,7 +50,7 @@ export class TransactionService {
     startDate: Date
   ) {
     try {
-      for (let i = 1; i <= parcels; i++) {
+      for (let i = 0; i < parcels; i++) {
         const monthRef = format(addMonths(startDate, i), "yyyy-MM");
         await this.prisma.transaction.create({
           data: {
