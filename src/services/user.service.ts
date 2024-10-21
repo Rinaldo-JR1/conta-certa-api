@@ -19,11 +19,7 @@ export class userService {
       throw new Error("Error getting user");
     }
   }
-  public static async updateBalance(
-    userId: string,
-    type: TransactionType,
-    value: number
-  ) {
+  public static async updateBalance(userId: string, type: TransactionType, value: number) {
     try {
       return await this.prisma.user.update({
         where: {
