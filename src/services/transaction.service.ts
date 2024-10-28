@@ -43,7 +43,14 @@ export class TransactionService {
     }
   }
 
-  public static async createTransaction(userId: string, parcels: number, amount: number, type: TransactionType, title: string, startDate: Date) {
+  public static async createTransaction(
+    userId: string,
+    parcels: number,
+    amount: number,
+    type: TransactionType,
+    title: string,
+    startDate: Date
+  ) {
     try {
       for (let i = 0; i < parcels; i++) {
         const monthRef = format(addMonths(startDate, i), "yyyy-MM");
