@@ -14,19 +14,19 @@ export class TransactionController {
       res.status(400).json({ message: "Nao foi informado um mes" });
       return;
     }
+    const netAmount = await TransactionService.getNetAmount(userId, monthRef);
     const transactions = await TransactionService.getTransactionByMonth(
       monthRef,
       userId
     );
-    if (!transactions || transactions.length === 0) {
-      res.status(404).json({ message: "Nenhuma transacao encontrada" });
-      return;
-    }
-
     const incoming = monthCalc(transactions, "I");
     const output = monthCalc(transactions, "O");
-
-    res.status(200).json({ transactions, incoming, output });
+    res.status(200).json({
+      transactions,
+      incoming,
+      output,
+      netAmount: netAmount || 0,
+    });
     return;
   }
   public async createTransaction(
@@ -45,7 +45,7 @@ export class TransactionController {
       amount,
       type,
       title,
-      new Date()
+      startDate
     );
     res.status(201).json({ message: "Transacao criada com sucesso" });
   }

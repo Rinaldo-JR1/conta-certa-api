@@ -22,6 +22,13 @@ class App {
       console.log(`Ip: ${req.ip} || Request: ${req.method} ${req.path}`);
       next();
     });
+    this.app.use(
+      (error: any, req: Request, res: Response, next: NextFunction) => {
+        console.log("error middleware");
+        res.sendStatus(500);
+      }
+    );
+
     this.app.use(`${this.baseUrl}/users`, userRoutes);
     this.app.use(`${this.baseUrl}/transactions`, transactionRoutes);
     this.app.use(`${this.baseUrl}/auth`, authRoutes);

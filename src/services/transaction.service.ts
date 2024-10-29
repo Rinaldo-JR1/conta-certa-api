@@ -1,9 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { addMonths, format } from "date-fns";
-import { userService } from "./user.service";
 import { TransactionType } from "../shared/types/TransactionType";
 export class TransactionService {
-  private static prisma = new PrismaClient();
+  private static prisma = new PrismaClient({});
 
   public static async getTransactions(userId: string) {
     try {
@@ -31,6 +30,33 @@ export class TransactionService {
       throw new Error("Error getting transactions");
     }
   }
+  public static async getNetAmount(userId: string, monthRef: string) {
+    const backMonthInput = await this.prisma.transaction.aggregate({
+      _sum: {
+        amount: true,
+      },
+      where: {
+        AND: [
+          { type: "I" }, // Tipo específico
+          { monthRef: { lte: monthRef } }, // Mês anterior ao `monthRef`
+        ],
+      },
+    });
+    const backMonthOutput = await this.prisma.transaction.aggregate({
+      _sum: {
+        amount: true,
+      },
+      where: {
+        AND: [
+          { type: "O" }, // Tipo específico
+          { monthRef: { lte: monthRef } }, // Mês anterior ao `monthRef`
+        ],
+      },
+    });
+    const netAmount =
+      (backMonthInput._sum.amount || 0) - (backMonthOutput._sum.amount || 0);
+    return netAmount;
+  }
 
   public static async getTransactionById(id: string, userId: string) {
     try {
@@ -51,21 +77,39 @@ export class TransactionService {
     title: string,
     startDate: Date
   ) {
-    try {
-      for (let i = 0; i < parcels; i++) {
-        const monthRef = format(addMonths(startDate, i), "yyyy-MM");
-        await this.prisma.transaction.create({
-          data: {
-            title,
-            amount: amount / parcels,
-            monthRef: monthRef,
-            type,
-            parcel: i + 1,
-            userId: userId,
-          },
-        });
-        await userService.updateBalance(userId, type, amount / parcels);
+    if (type === "O") {
+      try {
+        for (let i = 0; i < parcels; i++) {
+          const monthRef = format(addMonths(startDate, i), "yyyy-MM");
+          await this.prisma.transaction.create({
+            data: {
+              title,
+              amount: amount / parcels,
+              monthRef: monthRef,
+              type,
+              parcel: i + 1,
+              userId: userId,
+            },
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        throw new Error("Error creating transaction");
       }
+      return;
+    }
+    try {
+      const monthRef = format(startDate, "yyyy-MM");
+      await this.prisma.transaction.create({
+        data: {
+          title,
+          amount,
+          monthRef: monthRef,
+          type,
+          parcel: 1,
+          userId: userId,
+        },
+      });
     } catch (error) {
       console.error(error);
       throw new Error("Error creating transaction");

@@ -3,6 +3,9 @@ import { AuthService } from "../services/auth.service";
 import { TokenService } from "../services/token.service";
 
 export class AuthController {
+  public async checkJwt(req: Request, res: Response, next: NextFunction) {
+    res.status(200).json({ auth: true });
+  }
   public async login(req: Request, res: Response, next: NextFunction) {
     const { login, password } = req.body;
     if (!login || !password) {
@@ -19,7 +22,7 @@ export class AuthController {
     res.cookie("token", TokenService.generateToken(data.id), {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000 * 6,
+      maxAge: 3600000 * 24,
     });
 
     res.status(200).json({ message: "Usuario logado com sucesso" });
