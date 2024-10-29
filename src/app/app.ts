@@ -13,7 +13,7 @@ class App {
     this.app = express();
     this.port = port;
     const corsOptions: CorsOptions = {
-      origin: ["http://localhost:4052"],
+      origin: ["*", "http://localhost:4052", "http://localhost:3000"],
     };
     this.app.use(cors(corsOptions));
     this.app.use(express.json());
