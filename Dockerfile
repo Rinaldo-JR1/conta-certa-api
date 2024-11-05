@@ -11,6 +11,8 @@ COPY . .
 
 RUN npx prisma generate
 
+RUN npx prisma deploy
+
 EXPOSE 4052
 
-CMD ["/app/run.sh"]
+CMD ["sh", "/app/run.sh"]
