@@ -36,4 +36,19 @@ export class userService {
       throw new Error("Error updating balance");
     }
   }
+  public static async createUser(name: string, login: string, password: string) {
+    try {
+      await this.prisma.user.create({
+        data: {
+          name,
+          login,
+          password,
+          balance: 0,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error creating user");
+    }
+  }
 }
