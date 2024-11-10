@@ -9,7 +9,7 @@ RUN npm install
 
 COPY . .
 
-RUN export $(cat .env | xargs)
+ARG DATABASE_URL
 
 RUN npx prisma generate
 

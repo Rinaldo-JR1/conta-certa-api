@@ -1,6 +1,6 @@
 setup:
   config:
-    env_file: .env
+    DATABASE_URL: my-example-bucket
 build:
   docker:
     web: Dockerfile
