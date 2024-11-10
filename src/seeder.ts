@@ -29,12 +29,20 @@ async function main() {
   ];
 
   for (const user of users) {
-    await prisma.user.upsert({
-      where: { id: user.id },
-      update: {},
-      create: user,
-    });
-    console.log(`User ${user.login} has been upserted`);
+    try {
+      await prisma.user.upsert({
+        where: { id: user.id },
+        update: {},
+        create: user,
+      });
+      console.log(`User ${user.login} has been upserted`);
+    } catch (error) {
+      if (error.code === 'P2002') {
+        console.log(`Unique constraint failed for user ${user.login}, skipping...`);
+      } else {
+        console.error(`Error upserting user ${user.login}:`, error);
+      }
+    }
   }
 
   console.log('Seeding completed');
