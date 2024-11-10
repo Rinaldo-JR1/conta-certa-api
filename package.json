@@ -8,7 +8,7 @@
     "start:dev": "tsx --env-file=.env src/server.ts",
     "start:watch": "tsx watch src/server.ts",
     "start:dist": "npm run dist && node dist/index.js",
-    "prisma-build": "npx prisma migrate deploy && npx prisma generate"
+    "prisma-build": " npx prisma generate && npx prisma migrate deploy && npx tsc src/seeder.ts && node src/seeder.js"
   },
   "keywords": [],
   "author": "",
