@@ -1,7 +1,9 @@
 #!/bin/bash
+# run script
+
 
 if [ "$NODE_ENV" == "production" ] ; then
-  npm run start:watch
+  npm run prisma-build && npm run start:watch
 else
-  npm run start:dev
+  npm run prisma-build && npm run start:dev
 fi

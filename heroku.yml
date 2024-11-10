@@ -1,0 +1,6 @@
+build:
+  docker:
+    web: Dockerfile
+  config:
+    DATABASE_URL: $DATABASE_URL
+    NODE_ENV: $NODE_ENV
