@@ -1,6 +1,8 @@
 setup:
-  config:
-    DATABASE_URL: my-example-bucket
+  addons:
+    - plan: heroku-postgresql
 build:
   docker:
-    web: Dockerfile
+    web: ./Dockerfile
+  config:
+    REQUIREMENTS_FILENAME: heroku.yml
