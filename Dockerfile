@@ -9,6 +9,8 @@ RUN npm install
 
 COPY . .
 
+RUN export $(cat .env | xargs)
+
 RUN npx prisma generate
 
 RUN npx prisma migrate deploy
