@@ -16,6 +16,20 @@ export class TransactionService {
       throw new Error("Error getting transactions");
     }
   }
+  public static async deleteTransaction(transactionId: string, userId: string) {
+    try {
+      const res = await this.prisma.transaction.delete({
+        where: {
+          id: transactionId,
+          userId,
+        },
+      });
+      return res.amount;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error deleting transaction");
+    }
+  }
 
   public static async getTransactionByMonth(monthRef: string, userId: string) {
     try {
@@ -53,8 +67,7 @@ export class TransactionService {
         ],
       },
     });
-    const netAmount =
-      (backMonthInput._sum.amount || 0) - (backMonthOutput._sum.amount || 0);
+    const netAmount = (backMonthInput._sum.amount || 0) - (backMonthOutput._sum.amount || 0);
     return netAmount;
   }
 
@@ -69,14 +82,7 @@ export class TransactionService {
     }
   }
 
-  public static async createTransaction(
-    userId: string,
-    parcels: number,
-    amount: number,
-    type: TransactionType,
-    title: string,
-    startDate: Date
-  ) {
+  public static async createTransaction(userId: string, parcels: number, amount: number, type: TransactionType, title: string, startDate: Date) {
     if (type === "O") {
       try {
         for (let i = 0; i < parcels; i++) {

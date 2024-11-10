@@ -5,10 +5,7 @@ import { VerifyTokenMiddleware } from "../middlewares/verifyToken.middleware";
 const userRoutes = Router();
 const userController = new UserController();
 
-userRoutes.get(
-  "/me",
-  VerifyTokenMiddleware.verifyToken,
-  userController.getMyUser
-);
+userRoutes.get("/me", VerifyTokenMiddleware.verifyToken, userController.getMyUser);
+userRoutes.post("/create", userController.createUser);
 
 export { userRoutes };
