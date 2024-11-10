@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 4052
 
-CMD ["sh", "/app/run.sh"]
+CMD ["bash", "/app/run.sh"]
